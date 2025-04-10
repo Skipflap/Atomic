@@ -46,6 +46,12 @@ class Greeks:
 
     def vega(self):
         return self.model.S * exp(-self.model.q * self.model.T) * self.pdf_d1 * sqrt(self.model.T)
+    
+    def vomma(self):
+        return self.vega() * ((self.model.d1 * self.model.d2) - 1) / self.model.sigma
+
+    def vanna(self):
+        return -self.model.S * exp(-self.model.q * self.model.T) * self.pdf_d1 * self.model.d2 / self.model.sigma
 
     def rho(self):
         X, T, r = self.model.X, self.model.T, self.model.r

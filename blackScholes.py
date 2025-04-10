@@ -28,6 +28,8 @@ def main():
         print(f"Theta (Call): {theta['call']:.4f}")
         print(f"Theta (Put):  {theta['put']:.4f}")
         print(f"Vega:         {greeks.vega():.4f}")
+        print(f"Vomma:        {greeks.vomma():.4f}")
+        print(f"Vanna:        {greeks.vanna():.4f}")
         print(f"Rho (Call):   {rho['call']:.4f}")
         print(f"Rho (Put):    {rho['put']:.4f}")
         
