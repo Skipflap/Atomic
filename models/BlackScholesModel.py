@@ -127,3 +127,41 @@ def implied_volatility_call(
         sigma = sigma - diff / vega_val
 
     return sigma
+
+def implied_volatility_put(
+    S, X, T, r, q, market_put_price, initial_guess=0.2, tol=1e-6, max_iter=100
+):
+    """
+    Computes the implied volatility for a European put option using the Newton-Raphson method.
+
+    Parameters:
+      - S: Current stock price
+      - X: Strike price
+      - T: Time to expiration (in years)
+      - r: Risk-free interest rate (in decimal form)
+      - q: Continuous dividend yield (in decimal form)
+      - market_put_price: Observed market price of the put option
+      - initial_guess: Initial volatility guess (default 0.2 for 20%)
+      - tol: Tolerance for convergence (default 1e-6)
+      - max_iter: Maximum number of iterations (default 100)
+
+    Returns:
+      - The implied volatility (sigma) that makes the theoretical put price match the market_put_price.
+    """
+    sigma = initial_guess
+    for i in range(max_iter):
+        model = BlackScholesModel(S, X, T, r, sigma, q)
+        price = model.put_price()
+        diff = price - market_put_price
+
+        if abs(diff) < tol:
+            return sigma
+
+        greeks = Greeks(model)
+        vega_val = greeks.vega()
+        if vega_val == 0:
+            break
+
+        sigma = sigma - diff / vega_val
+
+    return sigma
